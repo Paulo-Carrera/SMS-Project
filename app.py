@@ -4,6 +4,10 @@ from twilio.rest import Client
 from datetime import datetime
 from supabase import create_client
 import os
+from dotenv import load_dotenv  # Import dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
