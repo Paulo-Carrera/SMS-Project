@@ -86,10 +86,17 @@ def send_sms():
 # Endpoint to retrieve conversations
 @app.route("/conversations")
 def conversations():
-    # Fetch messages from Supabase or your database
-    response = supabase.table("messages").select("*").execute()
-    messages = response.data if response.data else []
+    try:
+        # Fetch messages from Supabase or your database
+        response = supabase.table("messages").select("*").execute()
+        if response.status_code != 200:
+            raise ValueError("Error fetching messages from Supabase")
+        messages = response.data if response.data else []
+    except Exception as e:
+        print(f"Error: {e}")
+        messages = []
     return render_template("conversations.html", messages=messages)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
