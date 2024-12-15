@@ -116,3 +116,33 @@ button:hover {
         padding: 1.5rem;
     }
 }
+.not-found-container {
+    text-align: center;
+    margin-top: 100px;
+    font-family: Arial, sans-serif;
+}
+
+.not-found-container h1 {
+    font-size: 3rem;
+    color: #ff6b6b;
+}
+
+.not-found-container p {
+    font-size: 1.5rem;
+    margin: 20px 0;
+}
+
+.back-home-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 20px;
+}
+
+.back-home-button:hover {
+    background-color: #0056b3;
+}

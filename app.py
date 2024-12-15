@@ -4,7 +4,7 @@ from twilio.rest import Client
 from datetime import datetime
 from supabase import create_client
 import os
-from dotenv import load_dotenv  # Import dotenv
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
@@ -16,18 +16,18 @@ CORS(app)
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
-# Ensure that the required credentials are available
+# Ensure Supabase credentials are available
 if not SUPABASE_URL or not SUPABASE_KEY:
     raise ValueError("Supabase credentials are not set!")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Twilio credentials (use environment variables for production)
+# Twilio credentials
 ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
 AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 TWILIO_PHONE_NUMBER = os.environ.get("TWILIO_PHONE_NUMBER")
 
-# Ensure Twilio credentials are set
+# Ensure Twilio credentials are available
 if not ACCOUNT_SID or not AUTH_TOKEN or not TWILIO_PHONE_NUMBER:
     raise ValueError("Twilio credentials are not set!")
 
@@ -72,38 +72,24 @@ def send_sms():
 
         # Check if the insertion was successful
         if response.data:  # Check if the response contains data (success)
-            return jsonify({"success": True, "message_sid": message_sent.sid, "conversation": message_sent.sid})
+            return jsonify({
+                "success": True,
+                "message_sid": message_sent.sid,
+                "conversation": message_sent.sid
+            })
         else:
-            # If there is an error, you can check the error attribute
             return jsonify({"success": False, "error": response.error}), 500
 
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 400
 
-
-# Endpoint to receive replies from Twilio
-@app.route("/receive-reply", methods=["POST"])
-def receive_reply():
-    from_number = request.form.get('From')
-    body = request.form.get('Body')
-
-    try:
-        # Save the reply to Supabase
-        response = supabase.table("messages").insert({
-            "sender_name": from_number,
-            "message_body": body,
-            "date": datetime.utcnow(),  # UTC datetime
-            "phone_number": from_number
-        }).execute()
-
-        # Check if the insertion was successful
-        if response.status_code == 201:
-            return "<Response></Response>"
-        else:
-            return "<Response><Message>Failed to save reply</Message></Response>"
-
-    except Exception as e:
-        return "<Response><Message>Failed to save reply</Message></Response>"
+# Endpoint to retrieve conversations
+@app.route("/conversations")
+def conversations():
+    # Fetch messages from Supabase or your database
+    response = supabase.table("messages").select("*").execute()
+    messages = response.data if response.data else []
+    return render_template("conversations.html", messages=messages)
 
 if __name__ == "__main__":
     app.run(debug=True)

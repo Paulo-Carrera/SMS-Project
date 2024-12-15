@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversations</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Conversations</h1>
+    <a href="/" class="button">Back to Home</a>
+    <div class="messages-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">
+                    <p><strong>From:</strong> {{ message.sender_name }}</p>
+                    <p><strong>Message:</strong> {{ message.message_body }}</p>
+                    <p><strong>Date:</strong> {{ message.date }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No messages found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

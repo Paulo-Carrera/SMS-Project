@@ -23,15 +23,23 @@
 
     <p id="response"></p>
 
+    <button id="conversationsButton">View Conversations</button>
+
     <script>
         const form = document.getElementById('smsForm');
         const responseEl = document.getElementById('response');
         const phoneInput = document.getElementById('phone_number');
-    
+        const conversationsButton = document.getElementById('conversationsButton');
+
+        // Redirect to the conversations page when the button is clicked
+        conversationsButton.addEventListener('click', () => {
+            window.location.href = '/conversations';
+        });
+
         // Automatically add +1 if the number doesn't already start with +1
         phoneInput.addEventListener('input', function() {
             if (!phoneInput.value.startsWith('+1')) {
-                phoneInput.value = '+1' + phoneInput.value.replace(/^(\+?1)?/, ''); // Remove existing +1 or country code if any
+                phoneInput.value = '+1' + phoneInput.value.replace(/^\+?1?/, ''); // Remove existing +1 or country code if any
             }
         });
 
