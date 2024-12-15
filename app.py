@@ -45,12 +45,14 @@ def send_sms():
     phone_number = data.get("phone_number")
     sender_name = data.get("sender_name")
     message = data.get("message")
-    
+
     if not sender_name or not message:
         return jsonify({"success": False, "error": "Sender name and message are required!"}), 400
 
-    # Get current date and time (Supabase will handle the datetime type properly)
-    message_body = f"FROM: {sender_name} \nDATE: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} \nMESSAGE: {message}"
+    # Get current date and time as a string
+    message_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    message_body = f"FROM: {sender_name} \nDATE: {message_date} \nMESSAGE: {message}"
 
     try:
         # Send the message using Twilio API
@@ -65,17 +67,19 @@ def send_sms():
             "sender_name": sender_name,
             "phone_number": phone_number,
             "message_body": message_body,
-            "date": datetime.utcnow()  # UTC format datetime, let Supabase handle it
+            "date": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')  # Save datetime as a string
         }).execute()
 
         # Check if the insertion was successful
-        if response.status_code == 201:
+        if response.data:  # Check if the response contains data (success)
             return jsonify({"success": True, "message_sid": message_sent.sid, "conversation": message_sent.sid})
         else:
-            return jsonify({"success": False, "error": "Failed to store message in Supabase"}), 500
+            # If there is an error, you can check the error attribute
+            return jsonify({"success": False, "error": response.error}), 500
 
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 400
+
 
 # Endpoint to receive replies from Twilio
 @app.route("/receive-reply", methods=["POST"])
