@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send SMS</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Send SMS</h1>
+    <form id="smsForm">
+        <label for="phone_number">Phone Number:</label><br>
+        <input type="text" id="phone_number" name="phone_number" placeholder="Enter phone number" required><br><br>        
+
+        <label for="sender_name">Sender Name:</label><br>
+        <input type="text" id="sender_name" name="sender_name" placeholder="Your Name" required><br><br>
+
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" required></textarea><br><br>
+
+        <button type="submit">Send Message</button>
+    </form>
+
+    <p id="response"></p>
+
+    <script>
+        const form = document.getElementById('smsForm');
+        const responseEl = document.getElementById('response');
+        const phoneInput = document.getElementById('phone_number');
+    
+        // Automatically add +1 if the number doesn't already start with +1
+        phoneInput.addEventListener('input', function() {
+            if (!phoneInput.value.startsWith('+1')) {
+                phoneInput.value = '+1' + phoneInput.value.replace(/^(\+?1)?/, ''); // Remove existing +1 or country code if any
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            let phoneNumber = phoneInput.value;
+            const senderName = document.getElementById('sender_name').value;
+            const message = document.getElementById('message').value;
+
+            // clear form
+            form.reset();
+    
+            // Validate phone number in E.164 format (example for USA +1 country code)
+            const phoneRegex = /^\+1\d{10}$/;
+            if (!phoneRegex.test(phoneNumber)) {
+                responseEl.textContent = "Please enter a valid phone number in the format: +1XXXXXXXXXX";
+                return;
+            }
+    
+            // Send the form data to the server
+            const response = await fetch('/send-sms', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone_number: phoneNumber, sender_name: senderName, message: message })
+            });
+    
+            const data = await response.json();
+            responseEl.textContent = data.success 
+                ? "Message sent successfully!" 
+                : `Error: ${data.error}`;
+        });
+    </script>
+</body>
+</html>

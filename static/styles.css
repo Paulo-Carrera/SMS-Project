@@ -1,0 +1,118 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #4a90e2;
+}
+
+form {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 2rem;
+}
+
+label {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    color: #4a4a4a;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #333;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+button {
+    background-color: #4a90e2;
+    color: #fff;
+    padding: 1rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #357ab7;
+}
+
+#response {
+    margin-top: 1rem;
+    font-size: 1rem;
+    text-align: center;
+    color: #333;
+}
+
+#conversation {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#conversation div {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+    display: inline-block;
+    width: 100%;
+    clear: both;
+}
+
+#conversation .you {
+    background-color: #d9f7be;
+    text-align: right;
+    margin-left: 50%;
+    margin-right: 0;
+}
+
+#conversation .twilio {
+    background-color: #f4f4f4;
+    text-align: left;
+    margin-left: 0;
+    margin-right: 50%;
+}
+
+@media (max-width: 600px) {
+    form {
+        padding: 1.5rem;
+    }
+}
